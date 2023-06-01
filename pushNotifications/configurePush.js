@@ -90,24 +90,25 @@
 //     });
 // };
 
-
 // import PushNotification from 'react-native-push-notification';
 // import PushNotificationIOS from '@react-native-community/push-notification-ios';
 // import * as RootNavigation from '../RootNavigation';
 // import {Platform} from 'react-native';
 
+import notifee, {
+  AuthorizationStatus,
+  EventType,
+  AndroidStyle,
+} from "@notifee/react-native";
+import messaging from "@react-native-firebase/messaging";
 
-import notifee, {AuthorizationStatus,EventType,AndroidStyle } from '@notifee/react-native';
-import messaging from '@react-native-firebase/messaging';
+export const configurePushNotifications = async () => {
+  console.log("CONFIGURE GOT A CALL");
+  if (await checkIfNotificationsEnabled()) requestUNotifPermission();
 
-export const configurePushNotifications = () => {
-  console.log('CONFIGURE GOT A CALL');
-  if(!checkIfNotificationsEnabled()) requestUNotifPermission()
-
-
-  getDeviceToken()
-  registerForFCMNotifications()
-  listenToEvents()
+  getDeviceToken();
+  registerForFCMNotifications();
+  listenToEvents();
   // try {
   //   PushNotification.configure({
   //     onRegister: function (info) {
@@ -160,7 +161,6 @@ export const configurePushNotifications = () => {
   // } catch (e) {
   //   console.log('!!! onNotification FAILED ', e);
   // }
-  
 };
 
 registerDeviceInfo = (deviceInfo, token) => {
@@ -168,101 +168,88 @@ registerDeviceInfo = (deviceInfo, token) => {
     DeviceToken: deviceInfo.token,
     OperatingSystem: deviceInfo.os,
   };
-  console.log('!!! body', body);
+  console.log("!!! body", body);
 
-  fetch('https://wwww.ricimr.com/registerDevice', {
-    method: 'POST',
+  fetch("https://wwww.ricimr.com/registerDevice", {
+    method: "POST",
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
       //   Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(body),
   })
-    .then(res => {
-      console.log('THE Response;;;', res);
-      console.log('!!! ', res);
+    .then((res) => {
+      console.log("THE Response;;;", res);
+      console.log("!!! ", res);
       if (res.status === 201 || res.status === 200) {
-        console.log('(@@@@@@@ Device was registered', res);
+        console.log("(@@@@@@@ Device was registered", res);
       } else {
-        console.log('THe failing status;;;');
+        console.log("THe failing status;;;");
         console.log(JSON.stringify(res));
       }
     })
-    .catch(err => {
+    .catch((err) => {
       //   console.error('@@@@@@@ Err', JSON.stringify(err));
     });
 };
 
-checkIfNotificationsEnabled = async ()=>{
+checkIfNotificationsEnabled = async () => {
+  const settings = await notifee.getNotificationSettings();
+  console.log("THE SETTINGS;;;", settings);
+  console.log("--- EventType ---", EventType);
+  if (settings.authorizationStatus == AuthorizationStatus.AUTHORIZED) {
+    console.log("--- permisions granted ---");
+    return true;
+  } else if (settings.authorizationStatus == AuthorizationStatus.DENIED) {
+    console.log("Notification permissions has been denied");
+    return false;
+  }
+};
 
-    const settings = await notifee.getNotificationSettings();
-    console.log('THE SETTINGS;;;',settings)
-    console.log('--- EventType ---',EventType)
-    if (settings.authorizationStatus == AuthorizationStatus.AUTHORIZED) {
-      console.log("--- permisions granted ---")
-      return true
-    } else if (settings.authorizationStatus == AuthorizationStatus.DENIED) {
-      console.log('Notification permissions has been denied');
-      return false
-    }
-  
-}
+requestUNotifPermission = async () => {
+  await notifee.requestPermission();
+};
 
+listenToEvents = async () => {
+  handleForgroundEvent();
+  handleBackgroundEvent();
+};
 
-requestUNotifPermission = async ()=>{
-  await notifee.requestPermission()
-}
-
-
-listenToEvents = async ()=>{
-
-   handleForgroundEvent()
-   handleBackgroundEvent()
-}
-
-handleForgroundEvent = ()=>{
-
+handleForgroundEvent = () => {
   notifee.onForegroundEvent(({ type, detail }) => {
-    console.log('--- EVENT HAPPENING IN FOREGROUND ---',type)
-    reactToNotificationAction(type,detail,'foreground')
-   
+    console.log("--- EVENT HAPPENING IN FOREGROUND ---", type);
+    reactToNotificationAction(type, detail, "foreground");
   });
+};
 
-}
-
-handleBackgroundEvent = ()=>{
-
- 
+handleBackgroundEvent = () => {
   notifee.onBackgroundEvent(async ({ type, detail }) => {
-    console.log('--- EVENT HAPPENING IN BACKGROUND ---',type)
-    reactToNotificationAction(type,detail,'background')
-    
+    console.log("--- EVENT HAPPENING IN BACKGROUND ---", type);
+    reactToNotificationAction(type, detail, "background");
   });
+};
 
-}
-
-handleNotificationDisplay = async (message)=>{
-
-    try {
-      console.log("About to show notifications;;;")
-      // Create a channel (required for Android)
+handleNotificationDisplay = async (message) => {
+  try {
+    console.log("About to show notifications;;;");
+    // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
+      id: "default",
+      name: "Default Channel",
     });
-    const notificationParsed = JSON.parse(message.data.notifee)
-    console.log('--- parsed json ---',notificationParsed)
-    const android = notificationParsed.android
-    const {notification} = android
-    const {image} = notification
+    const notificationParsed = JSON.parse(message.data.notifee);
+    console.log("--- parsed json ---", notificationParsed);
+    const android = notificationParsed.android;
+    const { notification } = android;
+    const { image } = notification;
 
-    console.log('--- NOTIFICAION STRINGIGY ---',image)
+    console.log("--- NOTIFICAION STRINGIGY ---", image);
 
     //Display a notification
     await notifee.displayNotification({
-      title: 'The Push App Notification',
-      body: 'Main body content of the notification',
+      title: "The Push App Notification",
+      body: "Main body content of the notification",
       android: {
         channelId,
         //smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
@@ -270,42 +257,32 @@ handleNotificationDisplay = async (message)=>{
         style: { type: AndroidStyle.BIGPICTURE, picture: image },
         largeIcon: image,
         pressAction: {
-          id: 'default',
+          id: "default",
         },
       },
     });
 
     //notifee.displayNotification(JSON.parse(message.data.notifee));
-    } catch (e) {
-      console.log('--- notifications failing to show ---',e)
-      console.log(e);
-    }
- 
+  } catch (e) {
+    console.log("--- notifications failing to show ---", e);
+    console.log(e);
+  }
+};
 
-}
-
-// Note that an async function or a function that returns a Promise 
+// Note that an async function or a function that returns a Promise
 // is required for both subscribers.
-const onMessageReceived = async (message)=> {
-   console.log('WE HAVE RECEIVED FCM MESSAGE',message)
-   handleNotificationDisplay(message)
-   //notifee.displayNotification(JSON.parse(message.data.notifee));
-   
+const onMessageReceived = async (message) => {
+  console.log("WE HAVE RECEIVED FCM MESSAGE", message);
+  handleNotificationDisplay(message);
+  //notifee.displayNotification(JSON.parse(message.data.notifee));
+};
 
-}
-
-
-const registerForFCMNotifications = ()=>{
-
+const registerForFCMNotifications = () => {
   messaging().onMessage(onMessageReceived);
   messaging().setBackgroundMessageHandler(onMessageReceived);
+};
 
-}
-
-
-const getDeviceToken = async ()=>{
-
-
+const getDeviceToken = async () => {
   // Register the device with FCM
   await messaging().registerDeviceForRemoteMessages();
 
@@ -313,47 +290,29 @@ const getDeviceToken = async ()=>{
   const token = await messaging().getToken();
 
   // Save the token
-  console.log('--- device token ---',token)
-  registerDeviceInfo({token: token, os: 'android'})
-}
+  console.log("--- device token ---", token);
+  registerDeviceInfo({ token: token, os: "android" });
+};
 
-const handleDismisedNotification = async ()=>{
+const handleDismisedNotification = async () => {
+  console.log("--- The App Has Been Dismissed ---");
+};
 
- console.log("--- The App Has Been Dismissed ---")
-}
+const handlePressedNotifcation = async () => {
+  console.log("--- The App Has Been Pressed ---");
+};
 
-const handlePressedNotifcation = async ()=>{
-
-  console.log("--- The App Has Been Pressed ---")
- }
-
-const reactToNotificationAction = (type,detail,event)=>{
-
-  console.log('The event on which event occured;;;',event)
+const reactToNotificationAction = (type, detail, event) => {
+  console.log("The event on which event occured;;;", event);
 
   switch (type) {
     case EventType.DISMISSED:
-      console.log('User dismissed notification', detail.notification);
-      handleDismisedNotification()
+      console.log("User dismissed notification", detail.notification);
+      handleDismisedNotification();
       break;
     case EventType.PRESS:
-      console.log('User pressed notification', detail.notification);
-      handlePressedNotifcation()
+      console.log("User pressed notification", detail.notification);
+      handlePressedNotifcation();
       break;
-  
-   
-
-      
   }
-}
-
-
-
-
-
-
-
-
-
-
-
+};
