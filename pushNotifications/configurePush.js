@@ -104,7 +104,15 @@ import messaging from "@react-native-firebase/messaging";
 
 export const configurePushNotifications = async () => {
   console.log("CONFIGURE GOT A CALL");
-  if (await checkIfNotificationsEnabled()) requestUNotifPermission();
+  const permisionsStatus = await checkIfNotificationsEnabled();
+  console.log("THE PERMISION STATUS", permisionsStatus);
+  if (!permisionsStatus) {
+    try {
+      await requestUNotifPermission();
+    } catch (err) {
+      console.log("REQUEST FOR PERMISSION ERROR", err);
+    }
+  }
 
   getDeviceToken();
   registerForFCMNotifications();
@@ -198,13 +206,30 @@ checkIfNotificationsEnabled = async () => {
   const settings = await notifee.getNotificationSettings();
   console.log("THE SETTINGS;;;", settings);
   console.log("--- EventType ---", EventType);
-  if (settings.authorizationStatus == AuthorizationStatus.AUTHORIZED) {
+  console.log(
+    "Settings CheckResults AUTH;;;",
+    settings.authorizationStatus == 1
+  );
+  console.log(
+    "Settings CheckResults UNAUTH;;;",
+    settings.authorizationStatus === -1
+  );
+  if (
+    settings.authorizationStatus == AuthorizationStatus.AUTHORIZED ||
+    settings.authorizationStatus === 1
+  ) {
     console.log("--- permisions granted ---");
     return true;
-  } else if (settings.authorizationStatus == AuthorizationStatus.DENIED) {
+  } else if (
+    settings.authorizationStatus ==
+    (AuthorizationStatus.DENIED || settings.authorizationStatus === -1)
+  ) {
     console.log("Notification permissions has been denied");
     return false;
+  } else {
+    return false;
   }
+  console.log("THE CODE REACH");
 };
 
 requestUNotifPermission = async () => {
