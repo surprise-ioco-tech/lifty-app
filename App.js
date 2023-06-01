@@ -151,7 +151,7 @@ import {
   StyleSheet,
   useColorScheme,
 } from "react-native";
-import AppNavigation from "./src/navigation/appnavigation";
+import AppNavigation from "./navigation/appnavigation";
 
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
 import { configurePushNotifications } from "./pushNotifications/configurePush";
