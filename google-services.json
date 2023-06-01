@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "163719570509",
+    "project_id": "lifty-app-17b53",
+    "storage_bucket": "lifty-app-17b53.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163719570509:android:095746e25d4dced7ce2804",
+        "android_client_info": {
+          "package_name": "com.surprisentsako.liftyapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARmid-zLX_DY49U4bu2eprU6zCvmX-UAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
