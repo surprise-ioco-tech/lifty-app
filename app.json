@@ -11,9 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "y"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,7 +29,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["@notifee/react-native"],
+    "plugins": [
+      "@notifee/react-native"
+    ],
     "extra": {
       "eas": {
         "projectId": "79d5c6e9-fc29-42b7-82c4-1645fed1f8f7"
