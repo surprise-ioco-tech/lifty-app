@@ -31,12 +31,14 @@
     "plugins": [
       "@notifee/react-native",
       "@react-native-firebase/app",
-      "expo-build-properties",
-      {
-        "ios": {
-          "useFrameworks": "static"
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
         }
-      }
+      ]
     ],
     "extra": {
       "eas": {
