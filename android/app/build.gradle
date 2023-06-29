@@ -113,7 +113,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.liftyapp"
+    //namespace "com.liftyapp"
     defaultConfig {
         applicationId 'com.surprisentsako.liftyapp'
         minSdkVersion rootProject.ext.minSdkVersion
