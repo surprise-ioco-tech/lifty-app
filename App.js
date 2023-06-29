@@ -155,18 +155,31 @@ import AppNavigation from "./navigation/appnavigation";
 
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
 import { configurePushNotifications } from "./pushNotifications/configurePush";
+import { requestUserPermission } from "./services/push";
 
 const App = () => {
   const isDarkMode = useColorScheme() === "dark";
+  const [openSettingsForNotifications] = useMMKVStorage(
+    "openSettingsForNotifications",
+    MMKV,
+    false
+  );
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   useEffect(() => {
-    console.log("registering for push");
-    configurePushNotifications();
+    // console.log("registering for push");
+    // configurePushNotifications();
+    requestUserPermission();
   }, []);
+
+  useEffect(() => {
+    if (openSettingsForNotifications) {
+      navigate("NotificationsSettingsScreen");
+    }
+  }, [openSettingsForNotifications]);
 
   return (
     <AppNavigation>
