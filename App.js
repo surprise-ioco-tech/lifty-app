@@ -177,7 +177,7 @@ const App = () => {
 
   useEffect(() => {
     if (openSettingsForNotifications) {
-      navigate("NotificationsSettingsScreen");
+      navigate("NotificationsSettings");
     }
   }, [openSettingsForNotifications]);
 
