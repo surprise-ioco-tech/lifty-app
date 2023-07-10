@@ -2,6 +2,7 @@ package com.surprisentsako.liftyapp;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.content.Intent;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -18,6 +19,12 @@ public class MainActivity extends ReactActivity {
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
     super.onCreate(null);
+  }
+
+  @Override
+  public void onNewIntent(Intent intent) {
+      setIntent(intent);
+      super.onNewIntent(intent);
   }
 
   /**
@@ -65,4 +72,6 @@ public class MainActivity extends ReactActivity {
     // because it's doing more than {@link Activity#moveTaskToBack} in fact.
     super.invokeDefaultOnBackPressed();
   }
+
+  
 }

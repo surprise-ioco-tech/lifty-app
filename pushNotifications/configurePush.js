@@ -110,7 +110,7 @@ handleBackgroundEvent = () => {
   });
 };
 
-handleNotificationDisplay = async (message) => {
+export const handleNotificationDisplay = async (message) => {
   try {
     console.log("About to show notifications;;;");
     // Create a channel (required for Android)
@@ -118,18 +118,22 @@ handleNotificationDisplay = async (message) => {
       id: "default",
       name: "Default Channel",
     });
-    const notificationParsed = JSON.parse(message.data.notifee);
-    console.log("--- parsed json ---", notificationParsed);
-    const android = notificationParsed.android;
-    const { notification } = android;
-    const { image } = notification;
+    // const notificationParsed = message.data;
+    // console.log("--- parsed json ---", notificationParsed);
+    // const android = notificationParsed.fcm_options;
+    const { notification, data } = message;
+    const { fcm_options } = data;
+    const { image } = fcm_options;
+    const { title, body } = notification;
 
     console.log("--- NOTIFICAION STRINGIGY ---", image);
+    console.log("title.body", title);
+    console.log("THe body;;", body);
 
     //Display a notification
     await notifee.displayNotification({
-      title: "The Push App Notification",
-      body: "Main body content of the notification",
+      title: title,
+      body: body,
       android: {
         channelId,
         //smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
@@ -159,7 +163,7 @@ const onMessageReceived = async (message) => {
 
 const registerForFCMNotifications = () => {
   messaging().onMessage(onMessageReceived);
-  messaging().setBackgroundMessageHandler(onMessageReceived);
+  // messaging().setBackgroundMessageHandler(onMessageReceived);
 };
 
 const getDeviceToken = async () => {

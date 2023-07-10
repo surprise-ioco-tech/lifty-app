@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import styles from './style';
+import styles from "./style";
 import {
   Alert,
   Image,
@@ -11,13 +11,13 @@ import {
   TouchableWithoutFeedback,
   Pressable,
   View,
-} from 'react-native';
-import {Button, SocialIcon} from 'react-native-elements';
+} from "react-native";
+import { Button, SocialIcon } from "react-native-elements";
 // import * as Facebook from "expo-facebook";
 
-const appId = '1047121222092614';
+const appId = "1047121222092614";
 
-export default function LoginScreen({navigation, route = null}) {
+export default function LoginScreen({ navigation, route = null }) {
   const onLoginPress = () => {};
   // const {itemId = 5, otherParam = ''} = route ? route.params : {};
   // console.log('THE ROUTE PARAMS;;;', itemId, otherParam);
@@ -65,12 +65,27 @@ export default function LoginScreen({navigation, route = null}) {
               containerStyle={styles.fbLoginButton}
               type="clear"
               onPress={() =>
-                navigation.navigate('Home', {
+                navigation.navigate("Home", {
                   itemId: 86,
-                  otherParam: 'anything you want here',
+                  otherParam: "anything you want here",
                 })
               }
               title="Go Home"
+            />
+
+            <Button
+              containerStyle={styles.fbLoginButton}
+              type="clear"
+              onPress={() =>
+                navigation.navigate("Details", {
+                  screen: "ProductScreen",
+                  params: {
+                    itemId: 86,
+                    otherParam: "anything you want here",
+                  },
+                })
+              }
+              title="Details"
             />
           </View>
         </View>

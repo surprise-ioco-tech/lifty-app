@@ -155,15 +155,21 @@ import AppNavigation from "./navigation/appnavigation";
 
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
 import { configurePushNotifications } from "./pushNotifications/configurePush";
-import { requestUserPermission } from "./services/push";
+import {
+  requestUserPermission,
+  getDeviceToken,
+  registerForFCMNotifications,
+} from "./services/push";
+import { MMKV, useMMKVObject } from "react-native-mmkv";
+import { storage } from "./storage";
+import { Alert } from "react-native";
+import messaging from "@react-native-firebase/messaging";
 
 const App = () => {
   const isDarkMode = useColorScheme() === "dark";
-  const [openSettingsForNotifications] = useMMKVStorage(
-    "openSettingsForNotifications",
-    MMKV,
-    false
-  );
+
+  // const openSettingsForNotifications = storage.getBoolean("openSettingsFor");
+  // console.log("SETTINGS MMK V VALUE", openSettingsForNotifications);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -172,14 +178,25 @@ const App = () => {
   useEffect(() => {
     // console.log("registering for push");
     // configurePushNotifications();
+    // console.log("MMKvalue;;;", openSettingsForNotifications);
     requestUserPermission();
+    getDeviceToken();
+    registerForFCMNotifications();
   }, []);
 
-  useEffect(() => {
-    if (openSettingsForNotifications) {
-      navigate("NotificationsSettings");
-    }
-  }, [openSettingsForNotifications]);
+  // useEffect(() => {
+  //   if (openSettingsForNotifications) {
+  //     navigate("NotificationsSettings");
+  //   }
+  // }, [openSettingsForNotifications]);
+
+  // useEffect(() => {
+  //   const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+  //     Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
+  //   });
+
+  //   return unsubscribe;
+  // }, []);
 
   return (
     <AppNavigation>
