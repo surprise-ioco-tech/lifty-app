@@ -18,6 +18,20 @@ function AppNavigation() {
   //const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [initialRoute, setInitialRoute] = useState("Home");
+  // messaging()
+  //   .getInitialNotification()
+  //   .then((remoteMessage) => {
+  //     console.log("GETINITIAL NOTIFICATION iN APP;;;", remoteMessage);
+  //     setInitialRoute("NotificationSettings");
+  //     if (remoteMessage) {
+  //       console.log(
+  //         "Notification caused app to open from quit state:",
+  //         remoteMessage.notification
+  //       );
+  //       // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+  //     }
+  //     setLoading(false);
+  //   });
 
   useEffect(() => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
@@ -28,23 +42,26 @@ function AppNavigation() {
         "Notification caused app to open from background state:",
         remoteMessage
       );
-      navigate("NotificationSettings");
+      // navigate("NotificationSettings");
+      navigate("Details", {
+        screen: "ProductScreen",
+        params: {
+          itemId: 86,
+          otherParam: "anything you want here",
+        },
+      });
     });
 
-    // Check whether an initial notification is available
+    //Check whether an initial notification is available
     messaging()
       .getInitialNotification()
-      .then((remoteMessage) => {
-        console.log("GETINITIAL NOTIFICATION;;;", remoteMessage);
-        setInitialRoute("NotificationSettings");
-        if (remoteMessage) {
-          console.log(
-            "Notification caused app to open from quit state:",
-            remoteMessage.notification
-          );
-          setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
-        }
+      .then(async (remoteMessage) => {
+        //remoteMessage --> is now filled
+        console.log("getInitialNotification", remoteMessage);
         setLoading(false);
+      })
+      .catch((err) => {
+        console.log("WE HAVE A FAILED NOTIFICATION;;;", err);
       });
   }, []);
 

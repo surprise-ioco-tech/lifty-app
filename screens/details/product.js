@@ -19,7 +19,7 @@ const appId = "1047121222092614";
 
 export default function ProductScreen({ navigation, route = null }) {
   const onLoginPress = () => {};
-  // const {itemId = 5, otherParam = ''} = route ? route.params : {};
+  const { itemId = 5, otherParam = "" } = route ? route.params : {};
   // console.log('THE ROUTE PARAMS;;;', itemId, otherParam);
 
   // const onFbLoginPress = async () => {
@@ -45,6 +45,8 @@ export default function ProductScreen({ navigation, route = null }) {
         <View style={styles.loginScreenContainer}>
           <View style={styles.loginFormView}>
             <Text style={styles.logoText}>Product Screen</Text>
+            <Text>WITH PARAMS ID: {itemId}</Text>
+            <Text>AND THE TEXT THAT'S:: {otherParam}</Text>
 
             <Button
               buttonStyle={styles.loginButton}
