@@ -1,4 +1,5 @@
 import { registerRootComponent } from "expo";
+import "react-native-gesture-handler";
 import { MMKV } from "react-native-mmkv";
 import { storage } from "./storage";
 

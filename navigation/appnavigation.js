@@ -12,7 +12,6 @@ import DetailsNavigator from "./detailsNavigation";
 import { navigationRef, navigate } from "../RootNavigation";
 import { useEffect, useState } from "react";
 
-const NativeStack = createNativeStackNavigator();
 const Stack = createStackNavigator();
 
 function AppNavigation() {

@@ -2,48 +2,28 @@ import React from "react";
 import { View, Text } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const NativeStackNavigator = createNativeStackNavigator();
+const NativeStack = createNativeStackNavigator();
 
-const ProductScreen = () => {
-  return (
-    <View>
-      <Text>I'm the productScreen</Text>
-    </View>
-  );
-};
-
-const TestScreen = () => {
-  return (
-    <View>
-      <Text>I'm the Test Screen</Text>
-    </View>
-  );
-};
-
-const DetailsScreen = () => {
-  return (
-    <View>
-      <Text>I'm the Details Screen</Text>
-    </View>
-  );
-};
+import ProductScreen from "../screens/details/product";
+import DetailsScreen from "../screens/details/details";
+import TestScreen from "../screens/details/test";
 
 const DetailsNavigator = () => {
   return (
-    <NativeStackNavigator>
-      <NativeStackNavigator.Screen
-        name={"DetailsScren"}
+    <NativeStack.Navigator>
+      <NativeStack.Screen
+        name={"DetailsScreen"}
         component={DetailsScreen}
-      ></NativeStackNavigator.Screen>
-      <NativeStackNavigator.Screen
-        name={"ProductScren"}
+      ></NativeStack.Screen>
+      <NativeStack.Screen
+        name={"ProductScreen"}
         component={ProductScreen}
-      ></NativeStackNavigator.Screen>
-      <NativeStackNavigator.Screen
-        name={"TestScren"}
+      ></NativeStack.Screen>
+      <NativeStack.Screen
+        name={"TestScreen"}
         component={TestScreen}
-      ></NativeStackNavigator.Screen>
-    </NativeStackNavigator>
+      ></NativeStack.Screen>
+    </NativeStack.Navigator>
   );
 };
 
