@@ -30,6 +30,32 @@ const getDeviceToken = async () => {
 
   // Save the token
   console.log("--- device token ---", token);
+  try {
+    fetch("https://wwww.ricimr.com/registerDevice", {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        //   Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
+        console.log("THE Response;;;", res);
+        console.log("!!! ", res);
+        if (res.status === 201 || res.status === 200) {
+          console.log("(@@@@@@@ Device was registered", res);
+        } else {
+          console.log("THe failing status;;;");
+          console.log(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        console.error("@@@@@@@ Err", err);
+      });
+  } catch (error) {
+    console.log("ERROR COMMUNICATIONG WITH RICIMR");
+  }
   // registerDeviceInfo({ token: token, os: Device.osName });
 };
 const onMessageReceived = (remoteMsg) => {
