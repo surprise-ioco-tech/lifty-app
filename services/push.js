@@ -1,6 +1,6 @@
 import messaging from "@react-native-firebase/messaging";
 import { Alert } from "react-native";
-//import { handleNotificationDisplay } from "../pushNotifications/configurePush";
+import { handleNotificationDisplay } from "../pushNotifications/configurePush";
 
 async function requestUserPermission() {
   const authStatus = await messaging().requestPermission({
@@ -18,6 +18,7 @@ async function requestUserPermission() {
 const subscribeToBackgroundNotification = () => {
   console.log("Messaging is configured for backgroundTest");
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+    // alert("BACKGROUND EVEN FOR REMOTE MESSAGE");
     console.log("Message handled in the background!", remoteMessage);
   });
 };
@@ -30,32 +31,36 @@ const getDeviceToken = async () => {
 
   // Save the token
   console.log("--- device token ---", token);
-  try {
-    fetch("https://wwww.ricimr.com/registerDevice", {
-      method: "POST",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-        //   Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
-    })
-      .then((res) => {
-        console.log("THE Response;;;", res);
-        console.log("!!! ", res);
-        if (res.status === 201 || res.status === 200) {
-          console.log("(@@@@@@@ Device was registered", res);
-        } else {
-          console.log("THe failing status;;;");
-          console.log(JSON.stringify(res));
-        }
-      })
-      .catch((err) => {
-        console.error("@@@@@@@ Err", err);
-      });
-  } catch (error) {
-    console.log("ERROR COMMUNICATIONG WITH RICIMR");
-  }
+  // let body = {
+  //   DeviceToken: token,
+  //   OperatingSystem: "os",
+  // };
+  // try {
+  //   fetch("https://www.ricimr.com/pushr", {
+  //     method: "POST",
+  //     headers: {
+  //       "Access-Control-Allow-Origin": "*",
+  //       "Content-Type": "application/json",
+  //       //   Authorization: `Bearer ${token}`,
+  //     },
+  //     body: JSON.stringify(body),
+  //   })
+  //     .then((res) => {
+  //       console.log("THE Response;;;", res);
+  //       console.log("!!! ", res);
+  //       if (res.status === 201 || res.status === 200) {
+  //         console.log("(@@@@@@@ Device was registered", res);
+  //       } else {
+  //         console.log("THe failing status;;;");
+  //         console.log(JSON.stringify(res));
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("@@@@@@@ Err", err);
+  //     });
+  // } catch (error) {
+  //   console.log("ERROR COMMUNICATIONG WITH RICIMR");
+  // }
   // registerDeviceInfo({ token: token, os: Device.osName });
 };
 const onMessageReceived = (remoteMsg) => {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -58,6 +58,19 @@ function AppNavigation() {
       .then(async (remoteMessage) => {
         //remoteMessage --> is now filled
         console.log("getInitialNotification", remoteMessage);
+        if (remoteMessage) {
+          alert("Message JSON-STRINGIFIED ", JSON.stringify(remoteMessage));
+        } else {
+          alert("remoteMessage not set");
+          navigate("Details", {
+            screen: "TestScreen",
+            params: {
+              itemId: 86,
+              otherParam: "anything you want here",
+            },
+          });
+        }
+
         setLoading(false);
       })
       .catch((err) => {
